@@ -6,6 +6,7 @@ import {
     renderLoader,
     clearLoader
 } from './views/base';
+// import { stat } from 'fs';
 
 // * Global state of the app
 // * - Search object
@@ -31,12 +32,17 @@ const controlSearch = async () => {
         searchView.clearResults();
         renderLoader(elements.searchRes);
 
-        // 4. Search for recipes and await the result
-        await state.search.getResults();
+        try {
+            // 4. Search for recipes and await the result
+            await state.search.getResults();
 
-        // 5. Render results on UI
-        clearLoader();
-        searchView.renderResults(state.search.result);
+            // 5. Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+        } catch (err) {
+            alert(`Search: #1 Error processing [${err}]`);
+            clearLoader();
+        }
     }
 }
 
@@ -55,6 +61,38 @@ elements.searchResPages.addEventListener('click', e => {
 });
 
 // ? RECIPE CONTROLLER ##################################################################################################
-const r = new Recipe(49346);
-r.getRecipe();
-console.log(r);
+const controlRecipe = async () => {
+    // get the hash value and remove # to keep just numbers
+    const id = window.location.hash.replace('#', '');
+    console.log(id);
+
+    // just run if exist some value there
+    if (id) {
+
+        // ! Prepare UI for changes
+
+        // Create new recipe objetc
+        state.recipe = new Recipe(id);
+
+        try {
+            // Get recipe data
+            await state.recipe.getRecipe();
+
+            // Calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+
+            // Render recipe
+            console.log(state.recipe);
+        } catch (err) {
+            alert(`Recipe: #1 Error processing [${err}]`);
+        }
+
+    }
+};
+
+// for each event verufy if the hashtag on url was changed, if yes call recipe controller function
+// window.addEventListener('hashchange', controlRecipe);
+// On first load without events they will verify # and show recipe if is true
+// window.addEventListener('load', controlRecipe);
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));

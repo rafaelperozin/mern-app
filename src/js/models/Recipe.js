@@ -15,7 +15,7 @@ export default class Recipe {
             this.url = res.data.recipe.source_url;
             this.ingredients = res.data.recipe.ingredients;
         } catch (error) {
-            alert(`Recipe: Something went wrong [${error}]`);
+            alert(`Recipe: #2 Error building [${error}]`);
         }
     }
 
@@ -23,7 +23,7 @@ export default class Recipe {
         // Assuming that we need 15min. for each 3 ingredients
         const numIng = this.ingredients.length;
         const periods = Math.ceil(numIng / 3);
-        this.time = period * 15;
+        this.time = periods * 15;
     }
 
     calcServings() {
