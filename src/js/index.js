@@ -1,5 +1,6 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
+import List from './models/List';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import {
@@ -73,7 +74,7 @@ elements.searchResPages.addEventListener('click', e => {
 const controlRecipe = async () => {
     // get the hash value and remove # to keep just numbers
     const id = window.location.hash.replace('#', '');
-    console.log(id);
+    // console.log(id);
 
     // just run if exist some value there
     if (id) {
@@ -95,7 +96,7 @@ const controlRecipe = async () => {
         try {
             // Get recipe data and parse ingredients
             await state.recipe.getRecipe();
-            console.log(state.recipe.ingredients);
+            // console.log(state.recipe.ingredients);
             state.recipe.parseIngredients();
 
             // Calculate servings and time
@@ -133,5 +134,7 @@ elements.recipe.addEventListener('click', e => {
         state.recipe.updateServings('inc');
         recipeView.updateServingsIngredients(state.recipe);
     }
-    console.log(state.recipe);
+    // console.log(state.recipe);
 });
+
+window.l = new List();
